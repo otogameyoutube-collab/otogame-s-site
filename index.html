@@ -166,9 +166,32 @@
 
   footer{padding:40px 32px; text-align:center; color:var(--ink-dim); font-size:12px; border-top:1px solid var(--panel-line);}
 
-  @media(max-width:760px){
+  /* パソコン向け（900px以上） */
+  @media(min-width:900px){
+    header{padding:20px 48px;}
+    section.block{padding:80px 64px;}
+    .block-head{margin-bottom:32px;}
+    #hero{padding:80px 64px 56px;}
+    #hero h1{font-size:64px;}
+  }
+
+  /* タブレット対応（768px以下） */
+  @media(max-width:768px){
     .grid3{grid-template-columns:1fr;}
     nav ul{display:none;}
+  }
+
+  /* スマホ対応（480px以下） */
+  @media(max-width:480px){
+    header{padding:12px 16px;}
+    section.block{padding:40px 16px;}
+    .grid3{grid-template-columns:1fr;}
+    nav ul{display:none;}
+    #hero{padding:40px 16px 30px;}
+    #hero h1{font-size:clamp(28px,5vw,42px);}
+    #hero p{font-size:14px;}
+    .hero-cta{flex-direction:column;}
+    .btn{width:100%; text-align:center;}
   }
 </style>
 </head>
@@ -192,7 +215,7 @@
   <div class="hero-inner">
     <div class="eyebrow">Rhythm Game / v0.0.1 Coming Soon</div>
     <h1>テストページ</h1>
-    <p>インディーゲーで世界一の音ゲーを作りたいだけ</p>
+    <p>DSPタイムで刻む、新しいリズムゲーム体験。キャラクター・楽曲・譜面、すべてがここから始まる。</p>
     <div class="hero-cta">
       <a class="btn primary" href="#songs">楽曲を見る</a>
       <a class="btn ghost" href="#characters">キャラクターを見る</a>
@@ -308,6 +331,11 @@
 </section>
 
 <footer>
+  <div class="footer-links">
+    <a href="https://www.youtube.com/@NEGC-M" target="_blank">公式YouTube</a>
+    <span class="sep">/</span>
+    <a href="https://www.nicovideo.jp/user/144726872" target="_blank">公式ニコニコ動画</a>
+  </div>
   © 2026 Exciting Games. This is a design prototype — 実データではありません。
 </footer>
 
