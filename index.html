@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exciting Games | 公式サイト</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#F2EFEA;
+    --ink-dim:#B8B4C9;
+    --bg-base:#0F0D18;
+    --panel:#191527;
+    --panel-line:rgba(242,239,234,0.10);
+    --accent-magenta:#FF3D81;
+    --accent-cyan:#4DE8FF;
+    --accent-purple:#8B6BFF;
+    --radius:14px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg-base);
+    color:var(--ink);
+    font-family:'Noto Sans JP', sans-serif;
+    line-height:1.7;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.disp{
+    font-family:'Zen Kaku Gothic New','Space Grotesk',sans-serif;
+    font-weight:900;
+    letter-spacing:0.02em;
+  }
+  a{color:inherit; text-decoration:none;}
+  img.ph{display:block; width:100%; height:100%; object-fit:cover;}
+
+  /* ---------- ヘッダー ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 28px;
+    background:rgba(15,13,24,0.72);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--panel-line);
+  }
+  .logo{font-size:20px; font-weight:900; letter-spacing:0.06em;}
+  .logo span{color:var(--accent-cyan);}
+  nav ul{list-style:none; display:flex; gap:26px; font-size:14px; font-weight:500;}
+  nav a{opacity:0.85; transition:opacity .2s, color .2s;}
+  nav a:hover{opacity:1; color:var(--accent-cyan);}
+
+  /* ---------- HERO(時間帯背景) ---------- */
+  #hero{
+    position:relative;
+    min-height:78vh;
+    display:flex; flex-direction:column; justify-content:flex-end;
+    padding:60px 32px 46px;
+    overflow:hidden;
+    transition:background 1.2s ease;
+  }
+  #hero::after{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(15,13,24,0) 0%, rgba(15,13,24,0.55) 70%, rgba(15,13,24,0.95) 100%);
+    pointer-events:none;
+  }
+  .hero-inner{position:relative; z-index:2; max-width:760px;}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'Space Grotesk',sans-serif; font-size:12px; letter-spacing:0.18em;
+    text-transform:uppercase; color:var(--accent-cyan); margin-bottom:14px;
+  }
+  .eyebrow::before{content:""; width:22px; height:2px; background:var(--accent-cyan); display:inline-block;}
+  #hero h1{font-size:clamp(34px,6vw,58px); line-height:1.15; margin-bottom:14px;}
+  #hero p{color:var(--ink-dim); font-size:15px; max-width:520px;}
+  .hero-cta{display:flex; gap:14px; margin-top:26px;}
+  .btn{
+    padding:12px 24px; border-radius:999px; font-size:14px; font-weight:700;
+    border:1px solid var(--panel-line); transition:transform .15s, background .2s, border-color .2s;
+  }
+  .btn.primary{background:var(--accent-magenta); border-color:var(--accent-magenta); color:#150A10;}
+  .btn:hover{transform:translateY(-2px);}
+  .btn.primary:hover{background:#ff5793;}
+  .btn.ghost:hover{border-color:var(--accent-cyan); color:var(--accent-cyan);}
+
+  /* 現在の背景表示(デバッグ用ラベル・本番では消してOK) */
+  .time-badge{
+    position:absolute; top:18px; right:18px; z-index:3;
+    font-family:'Space Grotesk',sans-serif; font-size:11px; letter-spacing:.08em;
+    background:rgba(0,0,0,0.35); border:1px solid var(--panel-line);
+    padding:5px 10px; border-radius:999px; color:var(--ink-dim);
+  }
+
+  /* ---------- 共通セクション枠 ---------- */
+  section.block{padding:64px 32px; max-width:1120px; margin:0 auto;}
+  .block-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:26px; gap:16px; flex-wrap:wrap;}
+  .block-head h2{font-size:24px;}
+  .block-head .more{font-size:13px; color:var(--accent-cyan); white-space:nowrap;}
+  .block-head .num{font-family:'Space Grotesk',sans-serif; font-size:12px; color:var(--ink-dim); letter-spacing:.1em; display:block; margin-bottom:6px;}
+
+  /* ---------- ニュース ---------- */
+  .news-list{border-top:1px solid var(--panel-line);}
+  .news-item{
+    display:flex; gap:18px; align-items:center; padding:16px 4px;
+    border-bottom:1px solid var(--panel-line);
+    transition:background .2s;
+  }
+  .news-item:hover{background:rgba(255,255,255,0.03);}
+  .news-date{font-family:'Space Grotesk',sans-serif; font-size:12px; color:var(--ink-dim); width:76px; flex-shrink:0;}
+  .news-tag{
+    font-size:11px; padding:3px 9px; border-radius:6px; flex-shrink:0;
+    background:rgba(139,107,255,0.18); color:#C9B8FF; font-weight:700;
+  }
+  .news-tag.event{background:rgba(255,61,129,0.18); color:#FF9DBE;}
+  .news-title{font-size:14px; flex:1;}
+
+  /* ---------- キャラクター(横スクロール) ---------- */
+  .h-scroll{
+    display:flex; gap:16px; overflow-x:auto; padding:6px 4px 18px;
+    scroll-snap-type:x mandatory;
+    -ms-overflow-style:none; scrollbar-width:none;
+  }
+  .h-scroll::-webkit-scrollbar{display:none;}
+  .char-card{
+    scroll-snap-align:start; flex:0 0 168px;
+    background:var(--panel); border:1px solid var(--panel-line); border-radius:var(--radius);
+    overflow:hidden; transition:transform .2s, border-color .2s;
+  }
+  .char-card:hover{transform:translateY(-4px); border-color:var(--accent-cyan);}
+  .char-thumb{height:200px; background:linear-gradient(160deg,#2a2140,#191527); display:flex; align-items:center; justify-content:center; color:var(--ink-dim); font-size:12px;}
+  .char-info{padding:12px 14px;}
+  .char-info .role{font-size:11px; color:var(--accent-cyan); font-weight:700; letter-spacing:.05em;}
+  .char-info .name{font-size:15px; font-weight:700; margin-top:2px;}
+  .char-info .desc{font-size:12px; color:var(--ink-dim); margin-top:6px;}
+
+  /* ---------- ユニット(タブ切替) ---------- */
+  .unit-tabs{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:22px;}
+  .unit-tab{
+    padding:11px 20px; border-radius:10px; font-size:13px; font-weight:700;
+    border:1px solid var(--panel-line); background:var(--panel); color:var(--ink-dim);
+    cursor:pointer; transition:all .2s;
+  }
+  .unit-tab:hover{border-color:var(--accent-cyan); color:var(--ink);}
+  .unit-tab.active{background:var(--accent-cyan); color:#0A1A1D; border-color:var(--accent-cyan);}
+  .unit-panel{display:none; background:var(--panel); border:1px solid var(--panel-line); border-radius:var(--radius); padding:26px; gap:24px;}
+  .unit-panel.active{display:flex; flex-wrap:wrap; align-items:center;}
+  .unit-visual{flex:0 0 220px; height:130px; border-radius:10px; background:linear-gradient(150deg,#241c3a,#150f22); display:flex; align-items:center; justify-content:center; color:var(--ink-dim); font-size:12px;}
+  .unit-text{flex:1; min-width:220px;}
+  .unit-text h3{font-size:19px; margin-bottom:8px;}
+  .unit-text p{font-size:13px; color:var(--ink-dim);}
+  .unit-text .link{display:inline-block; margin-top:12px; font-size:13px; color:var(--accent-magenta); font-weight:700;}
+
+  /* ---------- 楽曲/譜面/イベント ---------- */
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+  .info-card{
+    background:var(--panel); border:1px solid var(--panel-line); border-radius:var(--radius);
+    padding:20px; transition:transform .2s, border-color .2s;
+  }
+  .info-card:hover{transform:translateY(-3px); border-color:var(--accent-purple);}
+  .info-card .cap{font-size:11px; color:var(--accent-purple); font-weight:700; letter-spacing:.06em; margin-bottom:8px;}
+  .info-card h3{font-size:16px; margin-bottom:6px;}
+  .info-card p{font-size:12.5px; color:var(--ink-dim);}
+  .diff-row{display:flex; gap:6px; margin-top:12px;}
+  .diff{font-size:10px; padding:3px 8px; border-radius:5px; background:rgba(255,255,255,0.06); color:var(--ink-dim);}
+
+  footer{padding:40px 32px; text-align:center; color:var(--ink-dim); font-size:12px; border-top:1px solid var(--panel-line);}
+
+  @media(max-width:760px){
+    .grid3{grid-template-columns:1fr;}
+    nav ul{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">EXCITING <span>GAMES</span></div>
+  <nav>
+    <ul>
+      <li><a href="#news">ニュース</a></li>
+      <li><a href="#characters">キャラクター</a></li>
+      <li><a href="#units">ユニット</a></li>
+      <li><a href="#songs">楽曲</a></li>
+      <li><a href="#events">イベント</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section id="hero">
+  <span class="time-badge" id="timeBadge">--:--</span>
+  <div class="hero-inner">
+    <div class="eyebrow">Rhythm Game / v0.0.1 Coming Soon</div>
+    <h1>音は、まだ鳴っていない。</h1>
+    <p>DSPタイムで刻む、新しいリズムゲーム体験。キャラクター・楽曲・譜面、すべてがここから始まる。</p>
+    <div class="hero-cta">
+      <a class="btn primary" href="#songs">楽曲を見る</a>
+      <a class="btn ghost" href="#characters">キャラクターを見る</a>
+    </div>
+  </div>
+</section>
+
+<!-- ニュース -->
+<section class="block" id="news">
+  <div class="block-head">
+    <div><span class="num">01 / NEWS</span><h2>新着情報</h2></div>
+    <a class="more" href="#">すべて見る →</a>
+  </div>
+  <div class="news-list">
+    <div class="news-item"><span class="news-date">08.29</span><span class="news-tag event">イベント</span><span class="news-title">秋の楽曲追加キャンペーン開始</span></div>
+    <div class="news-item"><span class="news-date">08.24</span><span class="news-tag">アップデート</span><span class="news-title">v0.0.1 判定タイミング微調整のお知らせ</span></div>
+    <div class="news-item"><span class="news-date">08.18</span><span class="news-tag">キャラクター</span><span class="news-title">新規ユニット情報を一部公開</span></div>
+    <div class="news-item"><span class="news-date">08.10</span><span class="news-tag">配信</span><span class="news-title">開発ログ #4 を公開しました</span></div>
+    <div class="news-item"><span class="news-date">08.02</span><span class="news-tag event">イベント</span><span class="news-title">体験版プレイレポート募集</span></div>
+  </div>
+</section>
+
+<!-- キャラクター(横スクロール) -->
+<section class="block" id="characters">
+  <div class="block-head">
+    <div><span class="num">02 / CHARACTERS</span><h2>キャラクター</h2></div>
+    <a class="more" href="#">一覧を見る →</a>
+  </div>
+  <div class="h-scroll">
+    <div class="char-card"><div class="char-thumb">character 01</div><div class="char-info"><div class="role">VOCAL</div><div class="name">仮名 A</div><div class="desc">まっすぐな性格の主人公格。</div></div></div>
+    <div class="char-card"><div class="char-thumb">character 02</div><div class="char-info"><div class="role">GUITAR</div><div class="name">仮名 B</div><div class="desc">クールだが情熱を秘める。</div></div></div>
+    <div class="char-card"><div class="char-thumb">character 03</div><div class="char-info"><div class="role">BASS</div><div class="name">仮名 C</div><div class="desc">マイペースなムードメーカー。</div></div></div>
+    <div class="char-card"><div class="char-thumb">character 04</div><div class="char-info"><div class="role">DRUMS</div><div class="name">仮名 D</div><div class="desc">リズム感抜群の努力家。</div></div></div>
+    <div class="char-card"><div class="char-thumb">character 05</div><div class="char-info"><div class="role">KEYS</div><div class="name">仮名 E</div><div class="desc">物静かだが芯が強い。</div></div></div>
+  </div>
+</section>
+
+<!-- ユニット(タブ切替) -->
+<section class="block" id="units">
+  <div class="block-head">
+    <div><span class="num">03 / UNITS</span><h2>ユニット</h2></div>
+  </div>
+  <div class="unit-tabs" id="unitTabs">
+    <button class="unit-tab active" data-target="unit-a">ユニットA</button>
+    <button class="unit-tab" data-target="unit-b">ユニットB</button>
+    <button class="unit-tab" data-target="unit-c">ユニットC</button>
+  </div>
+  <div class="unit-panel active" id="unit-a">
+    <div class="unit-visual">unit A visual</div>
+    <div class="unit-text">
+      <h3>ユニットA</h3>
+      <p>結成のきっかけは些細な出会いから。まっすぐな音を鳴らす4人組。</p>
+      <a class="link" href="#">専用ページへ →</a>
+    </div>
+  </div>
+  <div class="unit-panel" id="unit-b">
+    <div class="unit-visual">unit B visual</div>
+    <div class="unit-text">
+      <h3>ユニットB</h3>
+      <p>異なる背景を持つメンバーが集まった実力派ユニット。</p>
+      <a class="link" href="#">専用ページへ →</a>
+    </div>
+  </div>
+  <div class="unit-panel" id="unit-c">
+    <div class="unit-visual">unit C visual</div>
+    <div class="unit-text">
+      <h3>ユニットC</h3>
+      <p>実験的なサウンドを追求する少数精鋭ユニット。</p>
+      <a class="link" href="#">専用ページへ →</a>
+    </div>
+  </div>
+</section>
+
+<!-- 楽曲・譜面 -->
+<section class="block" id="songs">
+  <div class="block-head">
+    <div><span class="num">04 / SONGS</span><h2>楽曲情報</h2></div>
+    <a class="more" href="#">すべて見る →</a>
+  </div>
+  <div class="grid3">
+    <div class="info-card">
+      <div class="cap">SONG 01</div>
+      <h3>曲名サンプル I</h3>
+      <p>BPM 168 / 疾走感のあるオープニング曲。</p>
+      <div class="diff-row"><span class="diff">EASY 5</span><span class="diff">NORMAL 9</span><span class="diff">HARD 14</span></div>
+    </div>
+    <div class="info-card">
+      <div class="cap">SONG 02</div>
+      <h3>曲名サンプル II</h3>
+      <p>BPM 132 / 感情の起伏を描くバラード。</p>
+      <div class="diff-row"><span class="diff">EASY 4</span><span class="diff">NORMAL 8</span><span class="diff">HARD 13</span></div>
+    </div>
+    <div class="info-card">
+      <div class="cap">SONG 03</div>
+      <h3>曲名サンプル III</h3>
+      <p>BPM 180 / 高難度譜面のチャレンジ曲。</p>
+      <div class="diff-row"><span class="diff">NORMAL 10</span><span class="diff">HARD 16</span><span class="diff">EXTRA 19</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- イベント -->
+<section class="block" id="events">
+  <div class="block-head">
+    <div><span class="num">05 / EVENTS</span><h2>イベント情報</h2></div>
+    <a class="more" href="#">すべて見る →</a>
+  </div>
+  <div class="grid3">
+    <div class="info-card"><div class="cap">EVENT</div><h3>秋の楽曲追加キャンペーン</h3><p>期間限定で新曲2曲を先行プレイ可能に。</p></div>
+    <div class="info-card"><div class="cap">EVENT</div><h3>体験版プレイレポート募集</h3><p>感想投稿でオリジナル壁紙をプレゼント。</p></div>
+    <div class="info-card"><div class="cap">EVENT</div><h3>開発ログ配信</h3><p>毎週末Ci-enにて制作の裏側を公開中。</p></div>
+  </div>
+</section>
+
+<footer>
+  © 2026 Exciting Games. This is a design prototype — 実データではありません。
+</footer>
+
+<script>
+  // ---------- 時間帯で背景を切り替える ----------
+  const hero = document.getElementById('hero');
+  const badge = document.getElementById('timeBadge');
+
+  const timeThemes = [
+    { name:'朝', range:[5,9],   bg:'linear-gradient(160deg,#3a2a4a 0%, #8a5a6b 45%, #e0a06a 100%)' },
+    { name:'昼', range:[9,16],  bg:'linear-gradient(160deg,#1f3c5c 0%, #3f7fa8 55%, #a9d8e8 100%)' },
+    { name:'夕方', range:[16,19], bg:'linear-gradient(160deg,#2b1a3e 0%, #a8436b 45%, #ff9a56 100%)' },
+    { name:'夜', range:[19,23], bg:'linear-gradient(160deg,#0d0a1a 0%, #241a3d 50%, #4a2f6b 100%)' },
+    { name:'深夜', range:[23,5], bg:'linear-gradient(160deg,#05040a 0%, #100a1e 60%, #1c1230 100%)' },
+  ];
+
+  function currentTheme(hour){
+    return timeThemes.find(t=>{
+      const [s,e] = t.range;
+      return s < e ? (hour >= s && hour < e) : (hour >= s || hour < e);
+    }) || timeThemes[3];
+  }
+
+  function applyTimeBackground(){
+    const now = new Date();
+    const hour = now.getHours();
+    const theme = currentTheme(hour);
+    hero.style.background = theme.bg;
+    badge.textContent = `${theme.name} ・ ${String(hour).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  }
+  applyTimeBackground();
+  setInterval(applyTimeBackground, 60000);
+
+  // ---------- ユニットタブ切替 ----------
+  const tabs = document.querySelectorAll('.unit-tab');
+  const panels = document.querySelectorAll('.unit-panel');
+  tabs.forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      tabs.forEach(t=>t.classList.remove('active'));
+      panels.forEach(p=>p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.target).classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
